@@ -11,7 +11,7 @@ interface Props {
 // The title prop is optional and has a default value of 'My List'
 // The items prop is required and has no default value
 // The defineProps function is used to define the props of the component
-const { items } = withDefaults(defineProps<Props>(),{
+withDefaults(defineProps<Props>(),{
     title: 'My List'
 });
 </script>
@@ -19,8 +19,14 @@ const { items } = withDefaults(defineProps<Props>(),{
 <template>
     <h2>{{ title }}</h2>
     <ul>
+    <!-- {{  items }} -->
         <!-- Use the v-for directive to loop through the items list and display each item in a list item element -->
         <!-- The :key="idx" attribute is used to provide a unique key for each item in the list -->
         <li v-for="(item, idx) in items" :key="idx">{{ item }}</li>
     </ul>
 </template>
+
+
+<style scoped>
+
+</style>
