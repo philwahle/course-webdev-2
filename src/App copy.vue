@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Import the ref function from Vue
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 
 // Import the MyList component
 import MyList from './components/MyList.vue'
@@ -12,55 +12,37 @@ const items = ref<Item[]>([
   { value: 'Wäsche waschen', done: true },
   { value: 'Rechnungen bezahlen', done: false },
 ]);
-
 const liveRegion = ref<HTMLElement | null>(null);
 const heading = ref<HTMLHeadingElement | null>(null);
-
-const liveRegionContent = ref<string>('');
 
 const addItem = (item: Item) => {
   items.value.push(item);
 
-  // if (!liveRegion.value) return;
-  // liveRegion.value.textContent = `Du hast ${item.value} hinzugefügt.`;
-  liveRegionContent.value = `Du hast ${item.value} hinzugefügt.`;
+  if (!liveRegion.value) return;
+  liveRegion.value.textContent = `Du hast ${item.value} hinzugefügt.`;
 }
 
 const removeItem = (index: number) => {
+  console.log('removeItem', index);
   const item = items.value[index];
   items.value.splice(index, 1);
 
-  // if (!liveRegion.value) return;
-  // liveRegion.value.textContent = `Du hast ${item.value} entfernt.`;
-  liveRegionContent.value = `Du hast ${item.value} entfernt.`;
+  if (!liveRegion.value) return;
+  liveRegion.value.textContent = `Du hast ${item.value} entfernt.`;
 
   if (!heading.value) return;
   heading.value.focus();
 }
 
 const checkedItem = (item: Item) => {
-  // if (!liveRegion.value) return;
-  // liveRegion.value.textContent = `Du hast ${item.value} abgehakt.`;
-  liveRegionContent.value = `Du hast ${item.value} abgehakt.`;
+  if (!liveRegion.value) return;
+  liveRegion.value.textContent = `Du hast ${item.value} abgehakt.`;
 }
 
 const uncheckedItem = (item: Item) => {
-  // if (!liveRegion.value) return;
-  // liveRegion.value.textContent = `Du hast ${item.value} wieder aufgenommen.`;
-  liveRegionContent.value = `Du hast ${item.value} wieder aufgenommen.`;
-}
-
-watch(liveRegionContent, (newValue) => {
   if (!liveRegion.value) return;
-
-  if (!newValue) return;
-  liveRegion.value.style.display = 'flex';
-
-  const timeout = setTimeout(() => {
-    liveRegion.value!.style.display = 'none';
-    clearTimeout(timeout);
-  }, 2000);
-});
+  liveRegion.value.textContent = `Du hast ${item.value} wieder aufgenommen.`;
+}
 
 </script>
 
@@ -72,16 +54,11 @@ watch(liveRegionContent, (newValue) => {
 
     <!-- Live-Region für inhaltsabhängige Nachrichten -->
     <!-- class="sr-only" -->
-    <div role="status" aria-live="polite" aria-atomic="true" class="status status-success" ref="liveRegion"
-      style="display: none;">
+    <div role="status" aria-live="polite" aria-atomic="true" class="status status-success">
 
       <img src="./assets/check.svg" alt="" class="size-6" />
 
-      <div>
-        {{ liveRegionContent }}
-      </div>
-
-      <!-- <div ref="liveRegion" /> -->
+      <div ref="liveRegion" />
       <!-- inhaltsabhängige Nachrichten werden hier angezeigt und vorgelesen -->
     </div>
 
