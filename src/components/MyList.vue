@@ -1,10 +1,12 @@
 <script setup lang="ts">
 
+import { Item } from '../types';
+
 // The interface to define the props of the MyList component
 // an Interface is a way to define a type in TypeScript and it is used to define the props of the component
 interface Props {
     title?: string;
-    items: string[];
+    items: Item[];
 }
 
 // Define the default values for the props of the MyList component
@@ -20,13 +22,23 @@ withDefaults(defineProps<Props>(),{
     <h2>{{ title }}</h2>
     <ul>
     <!-- {{  items }} -->
-        <!-- Use the v-for directive to loop through the items list and display each item in a list item element -->
-        <!-- The :key="idx" attribute is used to provide a unique key for each item in the list -->
-        <li v-for="(item, idx) in items" :key="idx">{{ item }}</li>
+        <li v-for="(item, idx) in items" :key="idx">
+        <input type="checkbox" v-model="item.done" :id="item.name">
+        <label :for="item.name" :class="{
+            done: item.done
+        }">{{ item.name }}
+        
+        </label>
+        </li>
     </ul>
 </template>
 
 
 <style scoped>
+
+.done {
+    text-decoration: line-through;
+    font-style: italic;
+}
 
 </style>
