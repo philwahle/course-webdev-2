@@ -13,32 +13,43 @@ interface Props {
 // The title prop is optional and has a default value of 'My List'
 // The items prop is required and has no default value
 // The defineProps function is used to define the props of the component
-withDefaults(defineProps<Props>(),{
+withDefaults(defineProps<Props>(), {
     title: 'My List'
 });
+
+const emit = defineEmits<{
+    (e: 'remove', value: number): void
+}>()
+
+const removeItem = (index: number) => {
+    emit('remove', index)
+}
+
 </script>
 
 <template>
-    <h2>{{ title }}</h2>
     <ul>
-    <!-- {{  items }} -->
+        <!-- {{  items }} -->
         <li v-for="(item, idx) in items" :key="idx">
-        <input type="checkbox" v-model="item.done" :id="item.name">
-        <label :for="item.name" :class="{
-            done: item.done
-        }">{{ item.name }}
-        
-        </label>
+            <input type="checkbox" v-model="item.done" :id="item.name">
+            <label :for="item.name" :class="{
+                done: item.done
+            }">{{ item.name }}
+            </label>
+            <button type="button" id="button" 
+            :aria-label="'Lösche ' + item.name"
+            @click="removeItem(idx)">
+                Lösche
+            </button>
         </li>
     </ul>
 </template>
 
 
-<style scoped>
 
+<style scoped>
 .done {
     text-decoration: line-through;
     font-style: italic;
 }
-
 </style>
